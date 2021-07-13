@@ -29,6 +29,7 @@ const Box = styled.div`
     margin-bottom: 20px;
     font-style: 16px;
     font-weight: 700;
+    font-size: 16px;
     color: #333;
     margin-bottom: 20px;
   }
