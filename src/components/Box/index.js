@@ -7,60 +7,53 @@ const Box = styled.div`
   padding: 16px;
 
   .boxLink {
-    font-style: 14px;
-    color: #2e7bb4;
+    font-size: 14px;
+    color: #002d40;
     text-decoration: none;
     font-weight: 800;
   }
-
   .title {
-    font-style: 32px;
+    font-size: 32px;
     font-weight: 400;
     margin-bottom: 20px;
   }
-
-  .subtitle {
-    font-style: 18px;
+  .subTitle {
+    font-size: 18px;
     font-weight: 400;
     margin-bottom: 20px;
   }
-
   .smallTitle {
     margin-bottom: 20px;
-    font-style: 16px;
-    font-weight: 700;
     font-size: 16px;
-    color: #333;
+    font-weight: 700;
+    color: #333333;
     margin-bottom: 20px;
   }
-
   hr {
     margin-top: 12px;
     margin-bottom: 8px;
     border-color: transparent;
-    border-bottom-color: #ecf2fa;
+    border-bottom-color: #ECF2FA;
   }
-
   input {
     width: 100%;
-    background-color: #f4f4f4;
-    color: #333;
+    background-color: #F4F4F4;
+    color: #333333;
     border: 0;
     padding: 14px 16px;
     margin-bottom: 14px;
     border-radius: 10000px;
     ::placeholder {
-        color: #333;
-        opacity: 1;
+      color: #333333;
+      opacity: 1;
     }
   }
-
   button {
-      border: 0;
-      padding: 8px 12px;
-      color: #fff;
-      border-radius: 10000px;
-      background-color: #6f92bb;
+    border: 0;
+    padding: 8px 12px;
+    color: #FFFFFF;
+    border-radius: 10000px;
+    background-color: #002d40;
   }
 `;
 

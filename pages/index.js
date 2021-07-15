@@ -44,7 +44,7 @@ export default function Home() {
           </Box>
 
           <Box>
-            <h2 className="subtitle">O que você deseja fazer?</h2>
+            <h2 className="subTitle">O que você deseja fazer?</h2>
             <form onSubmit={e => {
               e.preventDefault();
               const dadosDoForm = new FormData(e.target);
