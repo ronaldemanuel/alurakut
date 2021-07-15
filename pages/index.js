@@ -10,14 +10,6 @@ import ProjectsBox from '../src/components/ProjectsBox';
 
 // Home
 export default function Home() {
-  // const comunidades = comunidades[0];
-  // const setComunidades = comunidades[1];
-  const [comunidades, setComunidades] = React.useState([{
-    id: '126547891635686',
-    title: 'Eu odeio acordar cedo',
-    image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg',
-    link: 'https://netflix.com/br/',
-  }]); // retorna [0] - valor; [1] - f()
   const githubUser = 'ronaldemanuel';
   const pessoasFavoritas = [
     'juunegreiros', 
@@ -27,55 +19,47 @@ export default function Home() {
     'felipefialho',
     'ronaldVader',
   ];
-
+  const [communities, setCommunities] = React.useState([]);
   const [followers, setFollowers] = React.useState([]);
-  React.useEffect(() => {
-    fetch(`https://api.github.com/users/${githubUser}/followers`)
-    .then(resServer => {
-      return resServer.json();
-    })
-    .then(resFinal => {
-      setFollowers(resFinal);
-    })
-  }, [])
-
-  // const projects = [
-  //   {
-  //     id: '123456789',
-  //     name: 'alurakut',
-  //     language: 'JavaScript',
-  //   },
-  //   {
-  //     id: '654987321',
-  //     name: 'apata-aqui',
-  //     language: 'CSS',
-  //   },
-  //   {
-  //     id: '7562189521',
-  //     name: 'seasons-style',
-  //     language: 'JavaScript',
-  //   },
-  //   {
-  //     id: '946532145',
-  //     name: 'events-site',
-  //     language: 'PHP',
-  //   },
-  //   {
-  //     id: '784646516',
-  //     name: 'teste',
-  //     language: 'HTML',
-  //   },
-  // ]
   const [projects, setProjects] = React.useState([]);
   React.useEffect(() => {
-    fetch(`https://api.github.com/users/${githubUser}/repos`)
-    .then(resServer => {
-      return resServer.json();
+    // Followers on GitHub API
+    fetch(`https://api.github.com/users/${githubUser}/followers`)
+    .then(async resServer => {
+      const resFinal = await resServer.json();
+      setFollowers(resFinal);
     })
-    .then(resFinal => {
-      console.log(resFinal);
+
+    // Repositories on Github API
+    fetch(`https://api.github.com/users/${githubUser}/repos`)
+    .then(async resServer => {
+      const resFinal = await resServer.json();
       setProjects(resFinal);
     })
+
+    //Communities on Dato CMS; API GaphQL
+    fetch('https://graphql.datocms.com/', {
+      method: 'POST', // GET is default
+      headers: {
+        'Authorization': '001c91d815ed12fb12717cd274c2e3',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: JSON.stringify({"query": `query { 
+        allCommunities {
+          id
+          title
+          imageUrl
+          link
+          creatorSlug
+        }
+      }`})
+    })
+    .then(async res => {
+      const resFinal = await res.json();
+      const communitiesFromCMS = resFinal.data.allCommunities;
+      setCommunities(communitiesFromCMS);
+    }) // Pega o retorno do responso.json() e já retorna
   }, [])
 
   return (
@@ -98,18 +82,30 @@ export default function Home() {
 
           <Box>
             <h2 className="subTitle">O que você deseja fazer?</h2>
-            <form onSubmit={e => {
+            <form onSubmit={function handleCreateCommunity(e) {
               e.preventDefault();
               const dadosDoForm = new FormData(e.target);
 
-              const comunidade = {
-                id: new Date().toISOString(),
+              const communityFromForm = {
                 title: dadosDoForm.get('title'),
-                image: dadosDoForm.get('image'),
+                imageUrl: dadosDoForm.get('image'),
                 link: dadosDoForm.get('link'),
+                creatorSlug: githubUser,
               };
-              const comunidadesAtualizadas = [...comunidades, comunidade];
-              setComunidades(comunidadesAtualizadas);
+
+              fetch('/api/communities', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(communityFromForm),
+              })
+              .then(async res => {
+                const datas = await res.json();
+                const community = datas.recordCreated;
+                const communitiesUpdated = [...communities, community];
+                setCommunities(communitiesUpdated);
+              })
             }}>
               <FormInput 
                 textDefault="Qual vai ser o nome da sua comunidade?"
@@ -133,17 +129,17 @@ export default function Home() {
           <ProfileRelationsBox title="Seguidores" items={followers} />
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
-              Comunidades ({comunidades.length})
+              Comunidades ({communities.length})
             </h2>
 
             <ul>
-              {comunidades.map((itemAtual, indice, items) => {
-                if(indice > (items.length - 7)) {
+              {communities.map((community, index, communities) => {
+                if(index > (communities.length - 7)) {
                   return (
-                    <li key={itemAtual.id}>
-                      <a href={itemAtual.link} target="_blank">
-                        <img src={itemAtual.image} />
-                        <span>{itemAtual.title}</span>
+                    <li key={community.id}>
+                      <a href={`/communities/${community.id}`} target="_blank">
+                        <img src={community.imageUrl} />
+                        <span>{community.title}</span>
                       </a>
                     </li>
                   )
