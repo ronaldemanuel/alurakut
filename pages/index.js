@@ -5,6 +5,7 @@ import FormInput from '../src/components/FormInput';
 import ProfileSideBar from '../src/components/ProfileSideBar';
 import { AlurakutMenu, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons';
 import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
+import ProfileRelationsBox from '../src/components/ProfileRelationsBox';
 
 // Home
 export default function Home() {
@@ -16,7 +17,7 @@ export default function Home() {
     image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg',
     link: 'https://netflix.com/br/',
   }]); // retorna [0] - valor; [1] - f()
-  const githubUser = 'ronaldVader';
+  const githubUser = 'ronaldemanuel';
   const pessoasFavoritas = [
     'juunegreiros', 
     'omariosouto', 
@@ -25,6 +26,16 @@ export default function Home() {
     'felipefialho',
     'ronaldVader',
   ];
+  const [followers, setFollowers] = React.useState([]);
+  React.useEffect(() => {
+    fetch(`https://api.github.com/users/${githubUser}/followers`)
+    .then(resServer => {
+      return resServer.json();
+    })
+    .then(resFinal => {
+      setFollowers(resFinal);
+    })
+  }, [])
 
   return (
     <>
@@ -77,21 +88,24 @@ export default function Home() {
           </Box>
         </div>
         <div className="profileRelationsArea" style={{ gridArea: 'profileRelationsArea' }}>
+          <ProfileRelationsBox title="Seguidores" items={followers} />
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">
               Comunidades ({comunidades.length})
             </h2>
 
             <ul>
-              {comunidades.map((itemAtual) => {
-                return (
-                  <li key={itemAtual.id}>
-                    <a href={itemAtual.link} target="_blank">
-                      <img src={itemAtual.image} />
-                      <span>{itemAtual.title}</span>
-                    </a>
-                  </li>
-                )
+              {comunidades.map((itemAtual, indice, items) => {
+                if(indice > (items.length - 7)) {
+                  return (
+                    <li key={itemAtual.id}>
+                      <a href={itemAtual.link} target="_blank">
+                        <img src={itemAtual.image} />
+                        <span>{itemAtual.title}</span>
+                      </a>
+                    </li>
+                  )
+                }
               })}
             </ul>
           </ProfileRelationsBoxWrapper>
@@ -101,15 +115,17 @@ export default function Home() {
             </h2>
 
             <ul>
-              {pessoasFavoritas.map((itemAtual) => {
-                return (
-                  <li key={itemAtual}>
-                    <a href={`/users/${itemAtual}`} target="_blank">
-                      <img src={`https://github.com/${itemAtual}.png`} />
-                      <span>{itemAtual}</span>
-                    </a>
-                  </li>
-                )
+              {pessoasFavoritas.map((itemAtual, indice, items) => {
+                if(indice > (items.length - 7)) {
+                  return (
+                    <li key={itemAtual}>
+                      <a href={`/users/${itemAtual}`} target="_blank">
+                        <img src={`https://github.com/${itemAtual}.png`} />
+                        <span>{itemAtual}</span>
+                      </a>
+                    </li>
+                  )
+                }
               })}
             </ul>
           </ProfileRelationsBoxWrapper>
