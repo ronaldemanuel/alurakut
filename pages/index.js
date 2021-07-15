@@ -6,6 +6,7 @@ import ProfileSideBar from '../src/components/ProfileSideBar';
 import { AlurakutMenu, OrkutNostalgicIconSet } from '../src/lib/AlurakutCommons';
 import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
 import ProfileRelationsBox from '../src/components/ProfileRelationsBox';
+import ProjectsBox from '../src/components/ProjectsBox';
 
 // Home
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
     'felipefialho',
     'ronaldVader',
   ];
+
   const [followers, setFollowers] = React.useState([]);
   React.useEffect(() => {
     fetch(`https://api.github.com/users/${githubUser}/followers`)
@@ -37,6 +39,45 @@ export default function Home() {
     })
   }, [])
 
+  // const projects = [
+  //   {
+  //     id: '123456789',
+  //     name: 'alurakut',
+  //     language: 'JavaScript',
+  //   },
+  //   {
+  //     id: '654987321',
+  //     name: 'apata-aqui',
+  //     language: 'CSS',
+  //   },
+  //   {
+  //     id: '7562189521',
+  //     name: 'seasons-style',
+  //     language: 'JavaScript',
+  //   },
+  //   {
+  //     id: '946532145',
+  //     name: 'events-site',
+  //     language: 'PHP',
+  //   },
+  //   {
+  //     id: '784646516',
+  //     name: 'teste',
+  //     language: 'HTML',
+  //   },
+  // ]
+  const [projects, setProjects] = React.useState([]);
+  React.useEffect(() => {
+    fetch(`https://api.github.com/users/${githubUser}/repos`)
+    .then(resServer => {
+      return resServer.json();
+    })
+    .then(resFinal => {
+      console.log(resFinal);
+      setProjects(resFinal);
+    })
+  }, [])
+
   return (
     <>
       <AlurakutMenu githubUser={githubUser} />
@@ -44,6 +85,7 @@ export default function Home() {
         {/* <Box style="grid-area: profileArea;"> */}
         <div className="profileArea" style={{ gridArea: 'profileArea'}}>
           <ProfileSideBar githubUser={githubUser}/>
+          <ProjectsBox projects={projects} githubUser={githubUser} />
         </div>
         <div className="welcomeArea" style={{ gridArea: 'welcomeArea'}}>
           <Box>
