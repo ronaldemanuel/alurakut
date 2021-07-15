@@ -259,6 +259,7 @@ export function OrkutNostalgicIconSet(props) {
         } else {
           total = 2;
         }
+        
         return (
           <li key={`orkut__icon_set__${slug}`}>
             <span className="OrkutNostalgicIconSet__title">
