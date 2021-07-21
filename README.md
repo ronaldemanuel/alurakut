@@ -1,6 +1,6 @@
 # Alurakut
 
-![](https://img.shields.io/badge/status-development-yellow)
+![](https://img.shields.io/badge/status-deploy-green)
 ![](https://img.shields.io/github/last-commit/ronaldemanuel/alurakut) 
 ![](https://img.shields.io/github/license/ronaldemanuel/alurakut) 
 ![](https://img.shields.io/badge/lib-React-blue)
